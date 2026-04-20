@@ -8,450 +8,124 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
 :root {
-  --bg: #f7f4ef;
-  --bg2: #eee9e0;
-  --ink: #1a1612;
-  --mid: #6b6257;
-  --gold: #b8863c;
-  --gold2: #d4a855;
-  --stamp: #c0392b;
-  --card-bg: #fdfaf5;
-  --border: #ddd5c5;
+  --bg:#f7f4ef;--bg2:#eee9e0;--ink:#1a1612;--mid:#6b6257;
+  --gold:#b8863c;--gold2:#d4a855;--stamp:#c0392b;
+  --card-bg:#fdfaf5;--border:#ddd5c5;
 }
+body { font-family:'Manrope',sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; }
 
-body {
-  font-family: 'Manrope', sans-serif;
-  background: var(--bg);
-  color: var(--ink);
-  min-height: 100vh;
-}
+.topbar { background:var(--ink); color:var(--bg); padding:14px 24px; display:flex; justify-content:space-between; align-items:center; }
+.brand { font-family:'Playfair Display',serif; font-size:20px; letter-spacing:.04em; }
+.brand em { font-style:italic; color:var(--gold2); }
+.mode-switch { display:flex; gap:4px; background:rgba(255,255,255,.1); padding:4px; border-radius:8px; }
+.mode-btn { padding:6px 14px; border-radius:5px; border:none; background:transparent; color:rgba(255,255,255,.55); font-size:12px; font-family:'Manrope',sans-serif; font-weight:500; cursor:pointer; transition:.2s; }
+.mode-btn.on { background:white; color:var(--ink); }
 
-/* ─── TOP BAR ─── */
-.topbar {
-  background: var(--ink);
-  color: var(--bg);
-  padding: 14px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.brand {
-  font-family: 'Playfair Display', serif;
-  font-size: 20px;
-  letter-spacing: .04em;
-}
-.brand em { font-style: italic; color: var(--gold2); }
-.mode-switch {
-  display: flex;
-  gap: 4px;
-  background: rgba(255,255,255,.1);
-  padding: 4px;
-  border-radius: 8px;
-}
-.mode-btn {
-  padding: 6px 14px;
-  border-radius: 5px;
-  border: none;
-  background: transparent;
-  color: rgba(255,255,255,.55);
-  font-size: 12px;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 500;
-  cursor: pointer;
-  transition: .2s;
-}
-.mode-btn.on { background: white; color: var(--ink); }
+.screen { display:none; }
+.screen.on { display:block; }
 
-/* ─── SCREENS ─── */
-.screen { display: none; }
-.screen.on { display: block; }
+.admin-wrap { padding:28px 24px; max-width:900px; margin:0 auto; }
+.admin-head { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:24px; flex-wrap:wrap; gap:12px; }
+.admin-head h1 { font-family:'Playfair Display',serif; font-size:28px; font-weight:400; }
+.admin-head p { font-size:12px; color:var(--mid); margin-top:4px; }
 
-/* ─── ADMIN ─── */
-.admin-wrap { padding: 28px 24px; max-width: 900px; margin: 0 auto; }
-.admin-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.admin-head h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px;
-  font-weight: 400;
-}
-.admin-head p { font-size: 12px; color: var(--mid); margin-top: 4px; }
+.btn-add { background:var(--ink); color:white; border:none; padding:11px 22px; border-radius:10px; font-size:13px; font-family:'Manrope',sans-serif; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:7px; transition:.18s; }
+.btn-add:hover { background:#2e2822; }
+.btn-add:disabled { opacity:.5; cursor:not-allowed; }
 
-.btn-add {
-  background: var(--ink);
-  color: white;
-  border: none;
-  padding: 11px 22px;
-  border-radius: 10px;
-  font-size: 13px;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  transition: .18s;
-}
-.btn-add:hover { background: #2e2822; }
+.clients-list { display:flex; flex-direction:column; gap:14px; }
 
-.clients-list { display: flex; flex-direction: column; gap: 14px; }
+.crow { background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:18px 20px; transition:box-shadow .2s; }
+.crow:hover { box-shadow:0 4px 20px rgba(0,0,0,.07); }
+.crow-top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:14px; }
+.cname { font-family:'Playfair Display',serif; font-size:19px; font-weight:400; }
+.cinfo { font-size:11px; color:var(--mid); margin-top:2px; }
+.cactions { display:flex; gap:8px; align-items:center; flex-shrink:0; }
 
-/* ─── CLIENT ROW ─── */
-.crow {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 18px 20px;
-  transition: box-shadow .2s;
-}
-.crow:hover { box-shadow: 0 4px 20px rgba(0,0,0,.07); }
-.crow-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-.cname {
-  font-family: 'Playfair Display', serif;
-  font-size: 19px;
-  font-weight: 400;
-}
-.cinfo { font-size: 11px; color: var(--mid); margin-top: 2px; }
-.cactions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+.btn-mark { background:var(--gold); color:white; border:none; padding:9px 18px; border-radius:8px; font-size:13px; font-family:'Manrope',sans-serif; font-weight:600; cursor:pointer; transition:.18s; }
+.btn-mark:hover { background:var(--gold2); }
+.btn-mark:disabled { opacity:.5; cursor:not-allowed; }
+.btn-sm { background:transparent; border:1px solid var(--border); color:var(--mid); padding:8px 13px; border-radius:8px; font-size:12px; font-family:'Manrope',sans-serif; cursor:pointer; transition:.18s; }
+.btn-sm:hover { border-color:var(--ink); color:var(--ink); }
+.btn-danger:hover { border-color:#c0392b; color:#c0392b; }
 
-.btn-mark {
-  background: var(--gold);
-  color: white;
-  border: none;
-  padding: 9px 18px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 600;
-  cursor: pointer;
-  transition: .18s;
-}
-.btn-mark:hover { background: var(--gold2); }
-.btn-sm {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--mid);
-  padding: 8px 13px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-family: 'Manrope', sans-serif;
-  cursor: pointer;
-  transition: .18s;
-}
-.btn-sm:hover { border-color: var(--ink); color: var(--ink); }
-.btn-danger { color: #c0392b; }
-.btn-danger:hover { border-color: #c0392b; }
+.stamps { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.stamp { width:34px; height:34px; border-radius:50%; border:2px dashed var(--border); display:flex; align-items:center; justify-content:center; font-size:15px; transition:.25s; flex-shrink:0; }
+.stamp.done { border:2px solid var(--stamp); background:rgba(192,57,43,.06); }
+.stamp.done::after { content:'✦'; color:var(--stamp); font-size:13px; }
+.stamp.free-done { border:2px solid var(--gold); background:linear-gradient(135deg,rgba(184,134,60,.15),rgba(212,168,85,.08)); }
+.stamp.free-done::after { content:'★'; color:var(--gold); font-size:14px; }
+.stamp.free-pending { border:2px dashed var(--gold); background:rgba(184,134,60,.04); }
+.stamp.free-pending::after { content:'★'; color:var(--gold2); opacity:.4; font-size:14px; }
+.stamp-label { font-size:11px; color:var(--mid); margin-top:8px; }
+.stamp-label b { color:var(--ink); }
 
-/* ─── STAMPS ROW ─── */
-.stamps { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.stamp {
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  border: 2px dashed var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 15px;
-  transition: .25s;
-  position: relative;
-  flex-shrink: 0;
-}
-.stamp.done {
-  border: 2px solid var(--stamp);
-  background: rgba(192,57,43,.06);
-}
-.stamp.done::after { content: '✦'; color: var(--stamp); font-size: 13px; }
-.stamp.free-done {
-  border: 2px solid var(--gold);
-  background: linear-gradient(135deg, rgba(184,134,60,.15), rgba(212,168,85,.08));
-}
-.stamp.free-done::after { content: '★'; color: var(--gold); font-size: 14px; }
-.stamp.free-pending {
-  border: 2px dashed var(--gold);
-  background: rgba(184,134,60,.04);
-}
-.stamp.free-pending::after { content: '★'; color: var(--gold2); opacity: .4; font-size: 14px; }
+/* LOADING */
+.loading { text-align:center; padding:60px 20px; color:var(--mid); }
+.spinner { width:32px; height:32px; border:3px solid var(--border); border-top-color:var(--gold); border-radius:50%; animation:spin .7s linear infinite; margin:0 auto 14px; }
+@keyframes spin { to { transform:rotate(360deg); } }
 
-.stamp-label {
-  font-size: 11px;
-  color: var(--mid);
-  margin-top: 8px;
-}
-.stamp-label b { color: var(--ink); }
+.empty { text-align:center; padding:64px 20px; color:var(--mid); }
+.empty .e-icon { font-size:52px; margin-bottom:14px; }
+.empty p { font-size:14px; line-height:1.7; }
 
-/* ─── EMPTY ─── */
-.empty {
-  text-align: center;
-  padding: 64px 20px;
-  color: var(--mid);
-}
-.empty .e-icon { font-size: 52px; margin-bottom: 14px; }
-.empty p { font-size: 14px; line-height: 1.7; }
+/* MODALS */
+.overlay { position:fixed; inset:0; background:rgba(26,22,18,.55); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; z-index:200; opacity:0; pointer-events:none; transition:opacity .25s; }
+.overlay.on { opacity:1; pointer-events:all; }
+.modal { background:white; border-radius:20px; padding:32px 28px; width:100%; max-width:370px; transform:translateY(14px) scale(.97); transition:transform .25s; }
+.overlay.on .modal { transform:none; }
+.modal h2 { font-family:'Playfair Display',serif; font-size:24px; font-weight:400; margin-bottom:22px; }
+.field { margin-bottom:15px; }
+.field label { display:block; font-size:11px; color:var(--mid); margin-bottom:5px; text-transform:uppercase; letter-spacing:.08em; font-weight:600; }
+.field input { width:100%; border:1.5px solid var(--border); border-radius:9px; padding:11px 13px; font-size:14px; font-family:'Manrope',sans-serif; outline:none; background:var(--bg); transition:border-color .2s; color:var(--ink); }
+.field input:focus { border-color:var(--ink); background:white; }
+.mbtns { display:flex; gap:10px; margin-top:6px; }
+.mbtns .btn-add { flex:1; justify-content:center; }
+.btn-cancel { background:transparent; border:1.5px solid var(--border); color:var(--mid); padding:11px 18px; border-radius:10px; font-size:13px; font-family:'Manrope',sans-serif; cursor:pointer; transition:.18s; }
+.btn-cancel:hover { border-color:var(--mid); }
 
-/* ─── ADD MODAL ─── */
-.overlay {
-  position: fixed; inset: 0;
-  background: rgba(26,22,18,.55);
-  backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s;
-}
-.overlay.on { opacity: 1; pointer-events: all; }
-.modal {
-  background: white;
-  border-radius: 20px;
-  padding: 32px 28px;
-  width: 100%;
-  max-width: 370px;
-  transform: translateY(14px) scale(.97);
-  transition: transform .25s;
-}
-.overlay.on .modal { transform: none; }
-.modal h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 24px;
-  font-weight: 400;
-  margin-bottom: 22px;
-}
-.field { margin-bottom: 15px; }
-.field label { display: block; font-size: 11px; color: var(--mid); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
-.field input {
-  width: 100%;
-  border: 1.5px solid var(--border);
-  border-radius: 9px;
-  padding: 11px 13px;
-  font-size: 14px;
-  font-family: 'Manrope', sans-serif;
-  outline: none;
-  background: var(--bg);
-  transition: border-color .2s;
-  color: var(--ink);
-}
-.field input:focus { border-color: var(--ink); background: white; }
-.mbtns { display: flex; gap: 10px; margin-top: 6px; }
-.mbtns .btn-add { flex: 1; justify-content: center; }
-.btn-cancel {
-  background: transparent;
-  border: 1.5px solid var(--border);
-  color: var(--mid);
-  padding: 11px 18px;
-  border-radius: 10px;
-  font-size: 13px;
-  font-family: 'Manrope', sans-serif;
-  cursor: pointer;
-  transition: .18s;
-}
-.btn-cancel:hover { border-color: var(--mid); }
+.qr-modal { text-align:center; max-width:320px; }
+.qr-name { font-size:14px; color:var(--mid); margin-bottom:20px; }
+#qr-container { display:flex; justify-content:center; margin-bottom:16px; }
+#qr-container canvas,#qr-container img { border-radius:10px; }
+.qr-url { font-size:11px; color:var(--mid); word-break:break-all; background:var(--bg); border-radius:8px; padding:10px 12px; margin-bottom:16px; cursor:pointer; border:1px solid var(--border); transition:.18s; }
+.qr-url:hover { background:var(--bg2); }
+.qr-hint { font-size:11px; color:var(--mid); line-height:1.6; margin-bottom:20px; }
 
-/* ─── QR MODAL ─── */
-.qr-modal { text-align: center; max-width: 320px; }
-.qr-modal h2 { margin-bottom: 6px; }
-.qr-name { font-size: 14px; color: var(--mid); margin-bottom: 20px; }
-#qr-container { display: flex; justify-content: center; margin-bottom: 16px; }
-#qr-container canvas, #qr-container img { border-radius: 10px; }
-.qr-url {
-  font-size: 11px;
-  color: var(--mid);
-  word-break: break-all;
-  background: var(--bg);
-  border-radius: 8px;
-  padding: 10px 12px;
-  margin-bottom: 16px;
-  cursor: pointer;
-  border: 1px solid var(--border);
-  transition: .18s;
-}
-.qr-url:hover { background: var(--bg2); }
-.qr-hint { font-size: 11px; color: var(--mid); line-height: 1.6; margin-bottom: 20px; }
+/* CLIENT CARD */
+.card-screen { min-height:calc(100vh - 52px); display:flex; align-items:center; justify-content:center; padding:24px 16px; }
+.loyalty-card { width:100%; max-width:360px; background:var(--card-bg); border:1px solid var(--border); border-radius:24px; overflow:hidden; box-shadow:0 8px 40px rgba(0,0,0,.1); }
+.lc-header { background:var(--ink); padding:24px 26px 20px; position:relative; overflow:hidden; }
+.lc-header::before { content:''; position:absolute; top:-30px; right:-30px; width:120px; height:120px; border-radius:50%; background:rgba(184,134,60,.15); }
+.lc-header::after { content:''; position:absolute; bottom:-20px; left:20px; width:80px; height:80px; border-radius:50%; background:rgba(184,134,60,.08); }
+.lc-brand { font-family:'Playfair Display',serif; font-size:13px; color:rgba(255,255,255,.5); letter-spacing:.12em; margin-bottom:10px; text-transform:uppercase; }
+.lc-name { font-family:'Playfair Display',serif; font-size:28px; color:white; font-weight:400; position:relative; z-index:1; }
+.lc-sub { font-size:11px; color:rgba(255,255,255,.4); margin-top:4px; letter-spacing:.06em; text-transform:uppercase; }
+.lc-body { padding:24px 26px; }
+.lc-progress-label { font-size:11px; color:var(--mid); text-transform:uppercase; letter-spacing:.08em; font-weight:600; margin-bottom:12px; }
+.lc-stamps { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:20px; }
+.lc-stamp { aspect-ratio:1; border-radius:50%; border:2px dashed #ddd5c5; display:flex; align-items:center; justify-content:center; font-size:18px; transition:all .4s cubic-bezier(.34,1.56,.64,1); }
+.lc-stamp.done { border:2px solid var(--stamp); background:rgba(192,57,43,.05); animation:stampIn .4s cubic-bezier(.34,1.56,.64,1); }
+.lc-stamp.done::after { content:'✦'; color:var(--stamp); font-size:16px; }
+.lc-stamp.gift { border:2px solid var(--gold); background:linear-gradient(135deg,rgba(184,134,60,.12),rgba(212,168,85,.06)); }
+.lc-stamp.gift-earned { border:2px solid var(--gold); background:linear-gradient(135deg,rgba(184,134,60,.2),rgba(212,168,85,.1)); box-shadow:0 0 16px rgba(184,134,60,.3); animation:giftGlow 2s ease-in-out infinite; }
+.lc-stamp.gift::after,.lc-stamp.gift-earned::after { content:'★'; color:var(--gold); font-size:18px; }
+@keyframes stampIn { from{transform:scale(0.5) rotate(-15deg);opacity:0} to{transform:scale(1) rotate(0);opacity:1} }
+@keyframes giftGlow { 0%,100%{box-shadow:0 0 10px rgba(184,134,60,.2)} 50%{box-shadow:0 0 24px rgba(184,134,60,.5)} }
+.lc-status { background:var(--bg); border-radius:12px; padding:14px 16px; margin-bottom:16px; display:flex; align-items:center; gap:12px; }
+.lc-status-icon { font-size:24px; }
+.lc-status-text { font-size:13px; line-height:1.5; }
+.lc-status-text strong { display:block; font-size:14px; color:var(--ink); }
+.lc-status-text span { color:var(--mid); }
+.lc-footer { padding:16px 26px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+.lc-total { font-size:11px; color:var(--mid); }
+.lc-total strong { color:var(--ink); }
+.lc-badge { font-size:10px; font-weight:600; letter-spacing:.1em; color:var(--gold); border:1px solid rgba(184,134,60,.3); padding:4px 10px; border-radius:20px; text-transform:uppercase; }
+.lc-refresh { display:block; text-align:center; margin-top:16px; font-size:12px; color:var(--mid); cursor:pointer; text-decoration:underline; }
 
-/* ─── CLIENT CARD PAGE ─── */
-.card-screen {
-  min-height: calc(100vh - 52px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 16px;
-}
-
-.loyalty-card {
-  width: 100%;
-  max-width: 360px;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: 0 8px 40px rgba(0,0,0,.1);
-}
-
-.lc-header {
-  background: var(--ink);
-  padding: 24px 26px 20px;
-  position: relative;
-  overflow: hidden;
-}
-.lc-header::before {
-  content: '';
-  position: absolute;
-  top: -30px; right: -30px;
-  width: 120px; height: 120px;
-  border-radius: 50%;
-  background: rgba(184,134,60,.15);
-}
-.lc-header::after {
-  content: '';
-  position: absolute;
-  bottom: -20px; left: 20px;
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  background: rgba(184,134,60,.08);
-}
-.lc-brand {
-  font-family: 'Playfair Display', serif;
-  font-size: 13px;
-  color: rgba(255,255,255,.5);
-  letter-spacing: .12em;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-}
-.lc-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px;
-  color: white;
-  font-weight: 400;
-  position: relative;
-  z-index: 1;
-}
-.lc-sub {
-  font-size: 11px;
-  color: rgba(255,255,255,.4);
-  margin-top: 4px;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-}
-
-.lc-body { padding: 24px 26px; }
-
-.lc-progress {
-  margin-bottom: 20px;
-}
-.lc-progress-label {
-  font-size: 11px;
-  color: var(--mid);
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-.lc-stamps {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
-.lc-stamp {
-  aspect-ratio: 1;
-  border-radius: 50%;
-  border: 2px dashed #ddd5c5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  transition: all .4s cubic-bezier(.34,1.56,.64,1);
-}
-.lc-stamp.done {
-  border: 2px solid var(--stamp);
-  background: rgba(192,57,43,.05);
-  animation: stampIn .4s cubic-bezier(.34,1.56,.64,1);
-}
-.lc-stamp.done::after { content: '✦'; color: var(--stamp); font-size: 16px; }
-.lc-stamp.gift {
-  border: 2px solid var(--gold);
-  background: linear-gradient(135deg, rgba(184,134,60,.12), rgba(212,168,85,.06));
-}
-.lc-stamp.gift-earned {
-  border: 2px solid var(--gold);
-  background: linear-gradient(135deg, rgba(184,134,60,.2), rgba(212,168,85,.1));
-  box-shadow: 0 0 16px rgba(184,134,60,.3);
-  animation: giftGlow 2s ease-in-out infinite;
-}
-.lc-stamp.gift::after, .lc-stamp.gift-earned::after { content: '★'; color: var(--gold); font-size: 18px; }
-@keyframes stampIn {
-  from { transform: scale(0.5) rotate(-15deg); opacity: 0; }
-  to { transform: scale(1) rotate(0); opacity: 1; }
-}
-@keyframes giftGlow {
-  0%,100% { box-shadow: 0 0 10px rgba(184,134,60,.2); }
-  50% { box-shadow: 0 0 24px rgba(184,134,60,.5); }
-}
-
-.lc-status {
-  background: var(--bg);
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.lc-status-icon { font-size: 24px; }
-.lc-status-text { font-size: 13px; line-height: 1.5; }
-.lc-status-text strong { display: block; font-size: 14px; color: var(--ink); }
-.lc-status-text span { color: var(--mid); }
-
-.lc-footer {
-  padding: 16px 26px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.lc-total { font-size: 11px; color: var(--mid); }
-.lc-total strong { color: var(--ink); }
-.lc-badge {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: .1em;
-  color: var(--gold);
-  border: 1px solid rgba(184,134,60,.3);
-  padding: 4px 10px;
-  border-radius: 20px;
-  text-transform: uppercase;
-}
-
-/* ─── TOAST ─── */
-.toast {
-  position: fixed;
-  bottom: 28px; left: 50%;
-  transform: translateX(-50%) translateY(16px);
-  background: var(--ink);
-  color: white;
-  padding: 11px 22px;
-  border-radius: 30px;
-  font-size: 13px;
-  font-weight: 500;
-  opacity: 0;
-  transition: all .28s;
-  pointer-events: none;
-  z-index: 300;
-  white-space: nowrap;
-}
-.toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(16px); background:var(--ink); color:white; padding:11px 22px; border-radius:30px; font-size:13px; font-weight:500; opacity:0; transition:all .28s; pointer-events:none; z-index:300; white-space:nowrap; }
+.toast.on { opacity:1; transform:translateX(-50%) translateY(0); }
 
 @media(max-width:480px){
   .topbar{padding:12px 16px;}
@@ -478,36 +152,28 @@ body {
         <h1>Клиенты</h1>
         <p>Нажми «+1 занятие» после каждого посещения</p>
       </div>
-      <button class="btn-add" onclick="openAdd()">
-        <span>+</span> Новый клиент
-      </button>
+      <button class="btn-add" onclick="openAdd()"><span>+</span> Новый клиент</button>
     </div>
-    <div class="clients-list" id="clients-list"></div>
+    <div class="clients-list" id="clients-list">
+      <div class="loading"><div class="spinner"></div>Загрузка...</div>
+    </div>
   </div>
 </div>
 
-<!-- DEMO CLIENT CARD (preview) -->
+<!-- DEMO -->
 <div class="screen" id="screen-demo">
-  <div class="card-screen">
-    <div id="demo-card"></div>
-  </div>
+  <div class="card-screen"><div id="demo-card"></div></div>
 </div>
 
 <!-- ADD MODAL -->
 <div class="overlay" id="modal-add" onclick="overlayClick(event,'modal-add')">
   <div class="modal">
     <h2>Новый клиент</h2>
-    <div class="field">
-      <label>Имя</label>
-      <input id="in-name" type="text" placeholder="Анна Соколова" />
-    </div>
-    <div class="field">
-      <label>Телефон (по желанию)</label>
-      <input id="in-phone" type="tel" placeholder="+7 900 000 00 00" />
-    </div>
+    <div class="field"><label>Имя</label><input id="in-name" type="text" placeholder="Анна Соколова" /></div>
+    <div class="field"><label>Телефон (по желанию)</label><input id="in-phone" type="tel" placeholder="+7 900 000 00 00" /></div>
     <div class="mbtns">
       <button class="btn-cancel" onclick="closeAdd()">Отмена</button>
-      <button class="btn-add" onclick="addClient()"><span>+</span> Добавить</button>
+      <button class="btn-add" id="btn-save" onclick="addClient()"><span>+</span> Добавить</button>
     </div>
   </div>
 </div>
@@ -519,10 +185,7 @@ body {
     <div class="qr-name" id="qr-client-name"></div>
     <div id="qr-container"></div>
     <div class="qr-url" id="qr-url-text" onclick="copyUrl()" title="Нажми чтобы скопировать"></div>
-    <div class="qr-hint">
-      📱 Клиент сохраняет ссылку или скриншот QR-кода.<br>
-      🔍 Ты сканируешь QR — и сразу открывается его карточка.
-    </div>
+    <div class="qr-hint">📱 Клиент сохраняет ссылку или скриншот QR.<br>🔍 Ты сканируешь QR → открывается его карточка.</div>
     <button class="btn-add" style="width:100%;justify-content:center;" onclick="closeQR()">Готово</button>
   </div>
 </div>
@@ -530,27 +193,14 @@ body {
 <div class="toast" id="toast"></div>
 
 <script>
-// ── STORAGE ──
-const STORE = 'ds_clients_v2';
-let clients = JSON.parse(localStorage.getItem(STORE) || 'null');
-if (!clients) {
-  clients = [
-    { id: 'c1', name: 'Анна Соколова', phone: '', visits: 5, since: 'январь 2025' },
-    { id: 'c2', name: 'Мария Иванова', phone: '', visits: 14, since: 'февраль 2025' },
-  ];
-  save();
-}
+const API = 'https://script.google.com/macros/s/AKfycbzm5Kc7eZSRKxfBKgiLRkhB-YExxg6hke6X1N7gsK5CbxkNqOLer7sbSrKuAtmGhzCV5Q/exec';
+const BASE_URL = location.href.split('?')[0];
 
-function save() { localStorage.setItem(STORE, JSON.stringify(clients)); }
-function uid() { return 'c' + Date.now().toString(36); }
-
-// ── CLIENT URL LOGIC ──
-// Each client card is: thispage.html?id=XXX&v=YYY
-// The page reads the URL params and shows the card.
-// Visits stored in localStorage on admin side, encoded into link.
-function clientUrl(c) {
-  const base = location.href.split('?')[0];
-  return `${base}?id=${c.id}&name=${encodeURIComponent(c.name)}&v=${c.visits}`;
+// ── API ──
+async function api(params) {
+  const url = API + '?' + new URLSearchParams(params);
+  const res = await fetch(url);
+  return res.json();
 }
 
 // ── TOAST ──
@@ -565,32 +215,20 @@ function toast(msg) {
 function setMode(m) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
   document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('on'));
-  if (m === 'admin') {
-    document.getElementById('screen-admin').classList.add('on');
-    document.querySelectorAll('.mode-btn')[0].classList.add('on');
-  } else {
-    document.getElementById('screen-demo').classList.add('on');
-    document.querySelectorAll('.mode-btn')[1].classList.add('on');
-    renderDemoCard();
-  }
+  document.getElementById('screen-' + m).classList.add('on');
+  event.target.classList.add('on');
+  if (m === 'demo') renderDemoCard();
 }
 
-// ── STAMPS HELPER ──
-function makeStamps(visits, size = 34) {
-  const total = 8;
-  const cycle = visits % total;
-  const justDone = visits > 0 && visits % total === 0;
+// ── STAMPS ──
+function makeStamps(visits) {
+  const cycle = visits % 8;
+  const justDone = visits > 0 && visits % 8 === 0;
   let html = '';
-  for (let i = 0; i < total; i++) {
-    const isLast = i === total - 1;
+  for (let i = 0; i < 8; i++) {
+    const isLast = i === 7;
     if (isLast) {
-      if (justDone) {
-        html += `<div class="stamp free-done"></div>`;
-      } else if (i < cycle) {
-        html += `<div class="stamp free-done"></div>`;
-      } else {
-        html += `<div class="stamp free-pending"></div>`;
-      }
+      html += `<div class="stamp ${(justDone || i < cycle) ? 'free-done' : 'free-pending'}"></div>`;
     } else {
       html += `<div class="stamp ${i < cycle ? 'done' : ''}"></div>`;
     }
@@ -598,61 +236,77 @@ function makeStamps(visits, size = 34) {
   return html;
 }
 
-function statusText(visits) {
+function statusInfo(visits) {
   const cycle = visits % 8;
-  if (visits > 0 && visits % 8 === 0) return { icon: '🎉', title: 'Бесплатное занятие!', sub: 'Этот цикл завершён — следующее занятие в подарок' };
-  if (cycle === 7) return { icon: '⭐', title: 'Следующее занятие бесплатно!', sub: `Осталось 1 занятие до подарка` };
-  return { icon: '💃', title: `${cycle} из 7 занятий`, sub: `Ещё ${7 - cycle} — и следующее в подарок` };
+  if (visits > 0 && visits % 8 === 0) return { icon:'🎉', title:'Бесплатное занятие!', sub:'Цикл завершён — следующее в подарок' };
+  if (cycle === 7) return { icon:'⭐', title:'Следующее занятие бесплатно!', sub:'Осталось 1 до подарка' };
+  return { icon:'💃', title:`${cycle} из 7 занятий`, sub:`Ещё ${7 - cycle} — и следующее в подарок` };
 }
 
 // ── RENDER ADMIN ──
-function renderAdmin() {
+async function loadClients() {
   const list = document.getElementById('clients-list');
-  if (!clients.length) {
-    list.innerHTML = `<div class="empty"><div class="e-icon">💃</div><p>Пока нет клиентов.<br>Нажми «+ Новый клиент» чтобы добавить первого.</p></div>`;
-    return;
+  list.innerHTML = '<div class="loading"><div class="spinner"></div>Загрузка...</div>';
+  try {
+    const clients = await api({ action: 'getAll' });
+    if (!clients.length) {
+      list.innerHTML = '<div class="empty"><div class="e-icon">💃</div><p>Пока нет клиентов.<br>Нажми «+ Новый клиент».</p></div>';
+      return;
+    }
+    list.innerHTML = clients.map(c => {
+      const cycle = c.visits % 8;
+      const justDone = c.visits > 0 && c.visits % 8 === 0;
+      const label = justDone
+        ? `<b>🎉 Бесплатное занятие заработано!</b>`
+        : cycle === 7
+        ? `<b>⭐ Следующее — бесплатное!</b>`
+        : `<b>${cycle}</b> из 7 занятий (ещё ${7 - cycle} до подарка)`;
+      return `<div class="crow" id="row-${c.id}">
+        <div class="crow-top">
+          <div>
+            <div class="cname">${c.name}</div>
+            <div class="cinfo">с ${c.since} · всего: ${c.visits} занятий</div>
+          </div>
+          <div class="cactions">
+            <button class="btn-mark" id="mark-${c.id}" onclick="mark('${c.id}','${c.name}')">+1 занятие</button>
+            <button class="btn-sm" onclick="showQR('${c.id}','${c.name}')">QR</button>
+            <button class="btn-sm btn-danger" onclick="del('${c.id}','${c.name}')">✕</button>
+          </div>
+        </div>
+        <div class="stamps">${makeStamps(c.visits)}</div>
+        <div class="stamp-label">${label}</div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    list.innerHTML = '<div class="empty"><div class="e-icon">⚠️</div><p>Ошибка загрузки.<br>Проверь интернет и обнови страницу.</p></div>';
   }
-  list.innerHTML = clients.map(c => {
-    const cycle = c.visits % 8;
-    const justDone = c.visits > 0 && c.visits % 8 === 0;
-    let label = justDone
-      ? `<b>🎉 Бесплатное занятие заработано!</b>`
-      : cycle === 7
-      ? `<b>⭐ Следующее — бесплатное!</b>`
-      : `<b>${cycle}</b> из 7 занятий (${7-cycle} до подарка)`;
-
-    return `<div class="crow" id="row-${c.id}">
-      <div class="crow-top">
-        <div>
-          <div class="cname">${c.name}</div>
-          <div class="cinfo">с ${c.since} · всего занятий: ${c.visits}</div>
-        </div>
-        <div class="cactions">
-          <button class="btn-mark" onclick="mark('${c.id}')">+1 занятие</button>
-          <button class="btn-sm" onclick="showQR('${c.id}')">QR</button>
-          <button class="btn-sm btn-danger" onclick="del('${c.id}')">✕</button>
-        </div>
-      </div>
-      <div class="stamps">${makeStamps(c.visits)}</div>
-      <div class="stamp-label">${label}</div>
-    </div>`;
-  }).join('');
 }
 
-// ── ACTIONS ──
-function mark(id) {
-  const c = clients.find(x => x.id === id);
-  c.visits++;
-  save();
-  renderAdmin();
-  if (c.visits % 8 === 0) toast(`🎉 ${c.name} — бесплатное занятие!`);
-  else toast(`Занятие отмечено (${c.visits % 8}/7)`);
+// ── MARK ──
+async function mark(id, name) {
+  const btn = document.getElementById('mark-' + id);
+  btn.disabled = true;
+  btn.textContent = '...';
+  try {
+    const res = await api({ action: 'mark', id });
+    if (res.ok) {
+      if (res.visits % 8 === 0) toast(`🎉 ${name} — бесплатное занятие!`);
+      else toast(`Занятие отмечено (${res.visits % 8}/7)`);
+      loadClients();
+    }
+  } catch(e) {
+    toast('Ошибка, попробуй ещё раз');
+    btn.disabled = false;
+    btn.textContent = '+1 занятие';
+  }
 }
 
-function del(id) {
-  if (!confirm('Удалить клиента?')) return;
-  clients = clients.filter(x => x.id !== id);
-  save(); renderAdmin();
+// ── DELETE ──
+async function del(id, name) {
+  if (!confirm(`Удалить ${name}?`)) return;
+  await api({ action: 'delete', id });
+  toast('Клиент удалён');
+  loadClients();
 }
 
 // ── ADD ──
@@ -665,48 +319,41 @@ function closeAdd() {
   document.getElementById('in-name').value = '';
   document.getElementById('in-phone').value = '';
 }
-function addClient() {
+async function addClient() {
   const name = document.getElementById('in-name').value.trim();
   if (!name) { document.getElementById('in-name').focus(); return; }
-  const c = {
-    id: uid(),
-    name,
-    phone: document.getElementById('in-phone').value.trim(),
-    visits: 0,
-    since: new Date().toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' })
-  };
-  clients.unshift(c);
-  save(); renderAdmin(); closeAdd();
-  toast('Клиент добавлен ✓');
-}
-
-function overlayClick(e, id) {
-  if (e.target.id === id) {
-    document.getElementById(id).classList.remove('on');
-    if (id === 'modal-qr') document.getElementById('qr-container').innerHTML = '';
+  const btn = document.getElementById('btn-save');
+  btn.disabled = true;
+  btn.textContent = 'Сохраняю...';
+  try {
+    const res = await api({ action: 'add', name, phone: document.getElementById('in-phone').value.trim() });
+    if (res.ok) {
+      closeAdd();
+      toast('Клиент добавлен ✓');
+      loadClients();
+    }
+  } catch(e) {
+    toast('Ошибка, попробуй ещё раз');
   }
+  btn.disabled = false;
+  btn.innerHTML = '<span>+</span> Добавить';
+}
+function overlayClick(e, id) {
+  if (e.target.id === id) document.getElementById(id).classList.remove('on');
 }
 document.getElementById('in-name').addEventListener('keydown', e => { if (e.key === 'Enter') addClient(); });
 
 // ── QR ──
-let qrInstance = null;
-function showQR(id) {
-  const c = clients.find(x => x.id === id);
-  document.getElementById('qr-client-name').textContent = c.name;
-  const url = clientUrl(c);
+function clientUrl(id) {
+  return `${BASE_URL}?client=${id}`;
+}
+function showQR(id, name) {
+  document.getElementById('qr-client-name').textContent = name;
+  const url = clientUrl(id);
   document.getElementById('qr-url-text').textContent = url;
-
   const container = document.getElementById('qr-container');
   container.innerHTML = '';
-  new QRCode(container, {
-    text: url,
-    width: 200,
-    height: 200,
-    colorDark: '#1a1612',
-    colorLight: '#ffffff',
-    correctLevel: QRCode.CorrectLevel.M
-  });
-
+  new QRCode(container, { text: url, width: 200, height: 200, colorDark: '#1a1612', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
   document.getElementById('modal-qr').classList.add('on');
 }
 function closeQR() {
@@ -718,36 +365,46 @@ function copyUrl() {
   navigator.clipboard.writeText(url).then(() => toast('Ссылка скопирована ✓'));
 }
 
-// ── CLIENT CARD RENDERER (shared) ──
-function renderCard(name, visits, container) {
-  const total = 8;
-  const cycle = visits % total;
-  const justDone = visits > 0 && visits % total === 0;
-  const st = statusText(visits);
+// ── DEMO CARD ──
+async function renderDemoCard() {
+  const container = document.getElementById('demo-card');
+  container.innerHTML = '<div class="loading"><div class="spinner"></div>Загрузка...</div>';
+  try {
+    const clients = await api({ action: 'getAll' });
+    if (!clients.length) {
+      container.innerHTML = '<p style="color:var(--mid);text-align:center">Добавьте клиента в кабинете</p>';
+      return;
+    }
+    renderCard(clients[0], container);
+  } catch(e) {
+    container.innerHTML = '<p style="color:var(--mid);text-align:center">Ошибка загрузки</p>';
+  }
+}
 
+// ── CLIENT CARD ──
+function renderCard(c, container) {
+  const st = statusInfo(c.visits);
   let stampsHtml = '';
-  for (let i = 0; i < total; i++) {
-    const isLast = i === total - 1;
+  const cycle = c.visits % 8;
+  const justDone = c.visits > 0 && c.visits % 8 === 0;
+  for (let i = 0; i < 8; i++) {
+    const isLast = i === 7;
     if (isLast) {
-      const cls = (justDone || i < cycle) ? 'gift-earned' : 'gift';
-      stampsHtml += `<div class="lc-stamp ${cls}"></div>`;
+      stampsHtml += `<div class="lc-stamp ${(justDone || i < cycle) ? 'gift-earned' : 'gift'}"></div>`;
     } else {
       stampsHtml += `<div class="lc-stamp ${i < cycle ? 'done' : ''}"></div>`;
     }
   }
-
   container.innerHTML = `
     <div class="loyalty-card">
       <div class="lc-header">
         <div class="lc-brand">Dance Studio · Loyalty Card</div>
-        <div class="lc-name">${name}</div>
+        <div class="lc-name">${c.name}</div>
         <div class="lc-sub">Карта постоянного клиента</div>
       </div>
       <div class="lc-body">
-        <div class="lc-progress">
-          <div class="lc-progress-label">Прогресс</div>
-          <div class="lc-stamps">${stampsHtml}</div>
-        </div>
+        <div class="lc-progress-label">Прогресс</div>
+        <div class="lc-stamps">${stampsHtml}</div>
         <div class="lc-status">
           <div class="lc-status-icon">${st.icon}</div>
           <div class="lc-status-text">
@@ -757,31 +414,29 @@ function renderCard(name, visits, container) {
         </div>
       </div>
       <div class="lc-footer">
-        <div class="lc-total">Всего занятий: <strong>${visits}</strong></div>
+        <div class="lc-total">Всего занятий: <strong>${c.visits}</strong></div>
         <div class="lc-badge">Loyalty</div>
       </div>
-    </div>`;
+    </div>
+    <a class="lc-refresh" onclick="reloadClientCard('${c.id}', this.parentElement)">↻ Обновить</a>`;
 }
 
-// ── DEMO CARD ──
-function renderDemoCard() {
-  const c = clients[0];
-  if (!c) {
-    document.getElementById('demo-card').innerHTML = '<p style="color:var(--mid);text-align:center">Добавьте клиента в кабинете</p>';
-    return;
+async function reloadClientCard(id, container) {
+  container.innerHTML = '<div class="loading"><div class="spinner"></div>Обновляю...</div>';
+  try {
+    const c = await api({ action: 'getOne', id });
+    renderCard(c, container);
+  } catch(e) {
+    container.innerHTML = '<p style="color:var(--mid);text-align:center">Ошибка</p>';
   }
-  renderCard(c.name, c.visits, document.getElementById('demo-card'));
 }
 
-// ── URL PARAMS: CLIENT VIEW ──
-function checkClientView() {
+// ── CLIENT PAGE (по URL ?client=ID) ──
+async function checkClientView() {
   const p = new URLSearchParams(location.search);
-  const id = p.get('id');
-  const name = p.get('name');
-  const v = parseInt(p.get('v') || '0');
-  if (!id || !name) return false;
+  const id = p.get('client');
+  if (!id) return false;
 
-  // Client is viewing their own card
   document.getElementById('mode-switch').style.display = 'none';
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
 
@@ -791,20 +446,25 @@ function checkClientView() {
   wrap.appendChild(inner);
   document.body.appendChild(wrap);
 
-  // Check if we have fresher data in localStorage
-  const local = JSON.parse(localStorage.getItem(STORE) || '[]');
-  const localClient = local.find(x => x.id === id);
-  const visits = localClient ? localClient.visits : v;
-  const displayName = localClient ? localClient.name : decodeURIComponent(name);
+  inner.innerHTML = '<div class="loading"><div class="spinner"></div>Загрузка карточки...</div>';
 
-  renderCard(displayName, visits, inner);
+  try {
+    const c = await api({ action: 'getOne', id });
+    if (c.error) {
+      inner.innerHTML = '<p style="color:var(--mid);text-align:center;padding:40px">Карточка не найдена</p>';
+    } else {
+      renderCard(c, inner);
+    }
+  } catch(e) {
+    inner.innerHTML = '<p style="color:var(--mid);text-align:center;padding:40px">Ошибка загрузки</p>';
+  }
   return true;
 }
 
 // ── INIT ──
-if (!checkClientView()) {
-  renderAdmin();
-}
+checkClientView().then(isClient => {
+  if (!isClient) loadClients();
+});
 </script>
 </body>
 </html>
