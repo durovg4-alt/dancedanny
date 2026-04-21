@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Dance Studio</title>
+<title>Danny Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
@@ -137,10 +137,10 @@ body { font-family:'Manrope',sans-serif; background:var(--bg); color:var(--ink);
 <body>
 
 <div class="topbar">
-  <div class="brand">Dance<em>Studio</em></div>
+  <div class="brand">Danny<em>Studio</em></div>
   <div class="mode-switch" id="mode-switch">
-    <button class="mode-btn on" onclick="setMode('admin')">Кабинет</button>
-    <button class="mode-btn" onclick="setMode('demo')">Карточка</button>
+    <button class="mode-btn on" onclick="setMode('admin')">Dashboard</button>
+    <button class="mode-btn" onclick="setMode('demo')">Card</button>
   </div>
 </div>
 
@@ -149,13 +149,13 @@ body { font-family:'Manrope',sans-serif; background:var(--bg); color:var(--ink);
   <div class="admin-wrap">
     <div class="admin-head">
       <div>
-        <h1>Клиенты</h1>
-        <p>Нажми «+1 занятие» после каждого посещения</p>
+        <h1>Clients</h1>
+        <p>Tap «+1 class» after each visit</p>
       </div>
-      <button class="btn-add" onclick="openAdd()"><span>+</span> Новый клиент</button>
+      <button class="btn-add" onclick="openAdd()"><span>+</span> New Client</button>
     </div>
     <div class="clients-list" id="clients-list">
-      <div class="loading"><div class="spinner"></div>Загрузка...</div>
+      <div class="loading"><div class="spinner"></div>Loading...</div>
     </div>
   </div>
 </div>
@@ -168,12 +168,12 @@ body { font-family:'Manrope',sans-serif; background:var(--bg); color:var(--ink);
 <!-- ADD MODAL -->
 <div class="overlay" id="modal-add" onclick="overlayClick(event,'modal-add')">
   <div class="modal">
-    <h2>Новый клиент</h2>
-    <div class="field"><label>Имя</label><input id="in-name" type="text" placeholder="Анна Соколова" /></div>
-    <div class="field"><label>Телефон (по желанию)</label><input id="in-phone" type="tel" placeholder="+7 900 000 00 00" /></div>
+    <h2>New Client</h2>
+    <div class="field"><label>Name</label><input id="in-name" type="text" placeholder="Anna Smith" /></div>
+    <div class="field"><label>Phone (optional)</label><input id="in-phone" type="tel" placeholder="+1 000 000 0000" /></div>
     <div class="mbtns">
-      <button class="btn-cancel" onclick="closeAdd()">Отмена</button>
-      <button class="btn-add" id="btn-save" onclick="addClient()"><span>+</span> Добавить</button>
+      <button class="btn-cancel" onclick="closeAdd()">Cancel</button>
+      <button class="btn-add" id="btn-save" onclick="addClient()"><span>+</span> Add</button>
     </div>
   </div>
 </div>
@@ -181,12 +181,12 @@ body { font-family:'Manrope',sans-serif; background:var(--bg); color:var(--ink);
 <!-- QR MODAL -->
 <div class="overlay" id="modal-qr" onclick="overlayClick(event,'modal-qr')">
   <div class="modal qr-modal">
-    <h2>QR-код клиента</h2>
+    <h2>Client QR Code</h2>
     <div class="qr-name" id="qr-client-name"></div>
     <div id="qr-container"></div>
-    <div class="qr-url" id="qr-url-text" onclick="copyUrl()" title="Нажми чтобы скопировать"></div>
-    <div class="qr-hint">📱 Клиент сохраняет ссылку или скриншот QR.<br>🔍 Ты сканируешь QR → открывается его карточка.</div>
-    <button class="btn-add" style="width:100%;justify-content:center;" onclick="closeQR()">Готово</button>
+    <div class="qr-url" id="qr-url-text" onclick="copyUrl()" title="Tap to copy"></div>
+    <div class="qr-hint">📱 Client saves the link or a screenshot of the QR.<br>🔍 You scan the QR → their card opens instantly.</div>
+    <button class="btn-add" style="width:100%;justify-content:center;" onclick="closeQR()">Done</button>
   </div>
 </div>
 
@@ -238,9 +238,9 @@ function makeStamps(visits) {
 
 function statusInfo(visits) {
   const cycle = visits % 8;
-  if (visits > 0 && visits % 8 === 0) return { icon:'🎉', title:'Бесплатное занятие!', sub:'Цикл завершён — следующее в подарок' };
-  if (cycle === 7) return { icon:'⭐', title:'Следующее занятие бесплатно!', sub:'Осталось 1 до подарка' };
-  return { icon:'💃', title:`${cycle} из 7 занятий`, sub:`Ещё ${7 - cycle} — и следующее в подарок` };
+  if (visits > 0 && visits % 8 === 0) return { icon:'🎉', title:'Free class earned!', sub:'Cycle complete — your next class is on us' };
+  if (cycle === 7) return { icon:'⭐', title:'Next class is free!', sub:'1 more class until your gift' };
+  return { icon:'💃', title:`${cycle} of 7 classes`, sub:`${7 - cycle} more classes until your free one` };
 }
 
 // ── RENDER ADMIN ──
@@ -250,25 +250,25 @@ async function loadClients() {
   try {
     const clients = await api({ action: 'getAll' });
     if (!clients.length) {
-      list.innerHTML = '<div class="empty"><div class="e-icon">💃</div><p>Пока нет клиентов.<br>Нажми «+ Новый клиент».</p></div>';
+      list.innerHTML = '<div class="empty"><div class="e-icon">💃</div><p>No clients yet.<br>Tap «+ New Client» to add the first one.</p></div>';
       return;
     }
     list.innerHTML = clients.map(c => {
       const cycle = c.visits % 8;
       const justDone = c.visits > 0 && c.visits % 8 === 0;
       const label = justDone
-        ? `<b>🎉 Бесплатное занятие заработано!</b>`
+        ? `<b>🎉 Free class earned!</b>`
         : cycle === 7
-        ? `<b>⭐ Следующее — бесплатное!</b>`
-        : `<b>${cycle}</b> из 7 занятий (ещё ${7 - cycle} до подарка)`;
+        ? `<b>⭐ Next class is free!</b>`
+        : `<b>${cycle}</b> of 7 classes (${7 - cycle} more to go)`;
       return `<div class="crow" id="row-${c.id}">
         <div class="crow-top">
           <div>
             <div class="cname">${c.name}</div>
-            <div class="cinfo">с ${c.since} · всего: ${c.visits} занятий</div>
+            <div class="cinfo">since ${c.since} · total: ${c.visits} classes</div>
           </div>
           <div class="cactions">
-            <button class="btn-mark" id="mark-${c.id}" onclick="mark('${c.id}','${c.name}')">+1 занятие</button>
+            <button class="btn-mark" id="mark-${c.id}" onclick="mark('${c.id}','${c.name}')">+1 class</button>
             <button class="btn-sm" onclick="showQR('${c.id}','${c.name}')">QR</button>
             <button class="btn-sm btn-danger" onclick="del('${c.id}','${c.name}')">✕</button>
           </div>
@@ -290,22 +290,22 @@ async function mark(id, name) {
   try {
     const res = await api({ action: 'mark', id });
     if (res.ok) {
-      if (res.visits % 8 === 0) toast(`🎉 ${name} — бесплатное занятие!`);
-      else toast(`Занятие отмечено (${res.visits % 8}/7)`);
+      if (res.visits % 8 === 0) toast(`🎉 ${name} — free class earned!`);
+      else toast(`Class marked (${res.visits % 8}/7)`);
       loadClients();
     }
   } catch(e) {
-    toast('Ошибка, попробуй ещё раз');
+    toast('Error, please try again');
     btn.disabled = false;
-    btn.textContent = '+1 занятие';
+    btn.textContent = '+1 class';
   }
 }
 
 // ── DELETE ──
 async function del(id, name) {
-  if (!confirm(`Удалить ${name}?`)) return;
+  if (!confirm(`Delete ${name}?`)) return;
   await api({ action: 'delete', id });
-  toast('Клиент удалён');
+  toast('Client deleted');
   loadClients();
 }
 
@@ -324,19 +324,19 @@ async function addClient() {
   if (!name) { document.getElementById('in-name').focus(); return; }
   const btn = document.getElementById('btn-save');
   btn.disabled = true;
-  btn.textContent = 'Сохраняю...';
+  btn.textContent = 'Saving...';
   try {
     const res = await api({ action: 'add', name, phone: document.getElementById('in-phone').value.trim() });
     if (res.ok) {
       closeAdd();
-      toast('Клиент добавлен ✓');
+      toast('Client added ✓');
       loadClients();
     }
   } catch(e) {
-    toast('Ошибка, попробуй ещё раз');
+    toast('Error, please try again');
   }
   btn.disabled = false;
-  btn.innerHTML = '<span>+</span> Добавить';
+  btn.innerHTML = '<span>+</span> Add';
 }
 function overlayClick(e, id) {
   if (e.target.id === id) document.getElementById(id).classList.remove('on');
@@ -362,7 +362,7 @@ function closeQR() {
 }
 function copyUrl() {
   const url = document.getElementById('qr-url-text').textContent;
-  navigator.clipboard.writeText(url).then(() => toast('Ссылка скопирована ✓'));
+  navigator.clipboard.writeText(url).then(() => toast('Link copied ✓'));
 }
 
 // ── DEMO CARD ──
@@ -372,7 +372,7 @@ async function renderDemoCard() {
   try {
     const clients = await api({ action: 'getAll' });
     if (!clients.length) {
-      container.innerHTML = '<p style="color:var(--mid);text-align:center">Добавьте клиента в кабинете</p>';
+      container.innerHTML = '<p style="color:var(--mid);text-align:center">Add a client in the dashboard first</p>';
       return;
     }
     renderCard(clients[0], container);
@@ -398,12 +398,12 @@ function renderCard(c, container) {
   container.innerHTML = `
     <div class="loyalty-card">
       <div class="lc-header">
-        <div class="lc-brand">Dance Studio · Loyalty Card</div>
+        <div class="lc-brand">Danny Studio · Private Classes</div>
         <div class="lc-name">${c.name}</div>
-        <div class="lc-sub">Карта постоянного клиента</div>
+        <div class="lc-sub">Loyalty Card</div>
       </div>
       <div class="lc-body">
-        <div class="lc-progress-label">Прогресс</div>
+        <div class="lc-progress-label">Progress</div>
         <div class="lc-stamps">${stampsHtml}</div>
         <div class="lc-status">
           <div class="lc-status-icon">${st.icon}</div>
@@ -414,11 +414,11 @@ function renderCard(c, container) {
         </div>
       </div>
       <div class="lc-footer">
-        <div class="lc-total">Всего занятий: <strong>${c.visits}</strong></div>
+        <div class="lc-total">Total classes: <strong>${c.visits}</strong></div>
         <div class="lc-badge">Loyalty</div>
       </div>
     </div>
-    <a class="lc-refresh" onclick="reloadClientCard('${c.id}', this.parentElement)">↻ Обновить</a>`;
+    <a class="lc-refresh" onclick="reloadClientCard('${c.id}', this.parentElement)">↻ Refresh</a>`;
 }
 
 async function reloadClientCard(id, container) {
@@ -446,17 +446,17 @@ async function checkClientView() {
   wrap.appendChild(inner);
   document.body.appendChild(wrap);
 
-  inner.innerHTML = '<div class="loading"><div class="spinner"></div>Загрузка карточки...</div>';
+  inner.innerHTML = '<div class="loading"><div class="spinner"></div>Loading your card...</div>';
 
   try {
     const c = await api({ action: 'getOne', id });
     if (c.error) {
-      inner.innerHTML = '<p style="color:var(--mid);text-align:center;padding:40px">Карточка не найдена</p>';
+      inner.innerHTML = '<p style="color:var(--mid);text-align:center;padding:40px">Card not found</p>';
     } else {
       renderCard(c, inner);
     }
   } catch(e) {
-    inner.innerHTML = '<p style="color:var(--mid);text-align:center;padding:40px">Ошибка загрузки</p>';
+    inner.innerHTML = '<p style="color:var(--mid);text-align:center;padding:40px">Loading error, please try again</p>';
   }
   return true;
 }
